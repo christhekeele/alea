@@ -1,5 +1,4 @@
 defmodule Dice do
-
   def expression(expression) do
     expression |> Dice.Expression.new
   end
@@ -7,5 +6,4 @@ defmodule Dice do
   def roll(expression) do
     expression |> Dice.Expression.new |> Dice.Expression.evaluate
   end
-
 end
