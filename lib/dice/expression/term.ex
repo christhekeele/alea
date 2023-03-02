@@ -4,7 +4,7 @@ defmodule Dice.Expression.Term do
   def evaluate(%__MODULE__{} = term) do
     result = case term.term do
       %Dice.Expression.Constant{} = constant -> Dice.Expression.Constant.evaluate(constant)
-      %Dice.Expression.Dice.Numeric.Dice.Roll{} = numeric_roll -> Dice.Expression.Dice.Numeric.Dice.Roll.evaluate(numeric_roll)
+      %Dice.Pool{} = numeric_roll -> Dice.Pool.evaluate(numeric_roll)
     end
 
     case term.sign do
@@ -21,7 +21,7 @@ defmodule Dice.Expression.Term do
       end,
       case term.term do
         %Dice.Expression.Constant{} = constant -> Dice.Expression.Constant.to_string(constant)
-        %Dice.Expression.Dice.Numeric.Dice.Roll{} = numeric_roll -> Dice.Expression.Dice.Numeric.Dice.Roll.to_string(numeric_roll)
+        %Dice.Pool{} = numeric_roll -> Dice.Pool.to_string(numeric_roll)
       end
     ])
   end
@@ -31,7 +31,7 @@ defmodule Dice.Expression.Term do
     import Dice.Expression.Literals
 
     terms = [
-      Dice.Expression.Dice.Numeric.Dice.Roll.combinator(),
+      Dice.Pool.combinator(),
       Dice.Expression.Constant.combinator()
     ]
 

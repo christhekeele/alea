@@ -1,19 +1,19 @@
-defmodule Dice.Expression.Dice.Numeric.Dice.Roll.Modifier.Keep do
+defmodule Dice.Pool.Modifier.Drop do
   defstruct [:number, mode: :random]
 
-  def modify(%__MODULE__{} = keep, rolls) do
-    case keep.mode do
-      :random -> Enum.take_random(rolls, keep.number)
-      :low -> Enum.sort(rolls) |> Enum.take(keep.number)
-      :high -> Enum.sort(rolls) |> :lists.reverse |> Enum.take(keep.number)
+  def modify(%__MODULE__{} = drop, rolls) do
+    case drop.mode do
+      :random -> Enum.take_random(rolls, length(rolls) - drop.number)
+      :low -> Enum.sort(rolls) |> Enum.drop(drop.number)
+      :high -> Enum.sort(rolls) |> :lists.reverse |> Enum.drop(drop.number)
     end
   end
 
-  def to_string(%__MODULE__{} = keep) do
-    "K" <> case keep.mode do
-      :random -> "#{keep.number}"
-      :low -> if keep.number == 1, do: "L", else: "#{keep.number}L"
-      :high -> if keep.number == 1, do: "H", else: "#{keep.number}H"
+  def to_string(%__MODULE__{} = drop) do
+    "D" <> case drop.mode do
+      :random -> "#{drop.number}"
+      :low -> if drop.number == 1, do: "L", else: "#{drop.number}L"
+      :high -> if drop.number == 1, do: "H", else: "#{drop.number}H"
     end
   end
 
@@ -27,7 +27,7 @@ defmodule Dice.Expression.Dice.Numeric.Dice.Roll.Modifier.Keep do
       rand_literal()
     ]
 
-    ignore(keep_literal())
+    ignore(drop_literal())
     |> concat(optional(unwrap_and_tag(non_negative_integer_literal(), :number)))
     |> concat(optional(unwrap_and_tag(choice(modes), :mode)))
     |> post_traverse({__MODULE__, :combinator_constructor, []})

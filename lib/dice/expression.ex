@@ -5,6 +5,10 @@ defmodule Dice.Expression do
     expression |> parse
   end
 
+  def roll(expression) when is_binary(expression) do
+    expression |> new |> evaluate
+  end
+
   def generate do
     {__MODULE__.Parser, :parse}
     |> NimbleParsec.parsec
