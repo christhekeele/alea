@@ -1,1 +1,1 @@
-import Dice
+import Alea

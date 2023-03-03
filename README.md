@@ -1,6 +1,6 @@
-# Dice
+# Alea
 
-> ***An RPG dice engine and notation language for `Elixir`.***
+> ***An RPG dice notation language and dice rolling engine.***
 
 ## Dice Notation
 
@@ -23,7 +23,50 @@ Dice expressions let you describe rolling multiple dice of different sizes, and 
 
 ### Roll Modifiers
 
-Roll modifiers let you describe rolling a pool of dice, and doing something with the results before factoring them into the calculation. Multiple modifiers stack, and are applied in order.
+Roll modifiers let you describe rolling a pool of dice, and doing something with the results before factoring them into the calculation.
+
+Available modifiers are:
+
+- ***Advantage***: (`+`) lets you treat each die rolled as if you had rolled it twice, and taken the better roll.
+- ***Disadvantage*** (`-`): lets you treat each die rolled as if you had rolled it twice, and taken the worse roll.
+- ***Maximize*** (`M`) lets you make the highest possible rolls for a given pool.
+- ***Minimize*** (`m`) lets you make the lowest possible rolls for a given pool.
+- ***Explode*** (`!`): lets you roll extra dice into a pool before adding them together, based on previous rolls.
+- ***Keep*** (`K`): lets you only hold on to certain results in a pool before adding them together.
+- ***Drop*** (`D`): lets you discard certain results from a pool before adding them together.
+- ***Count*** (`C`) lets you change a dice pool's output from being a sum of dice rolls, to the count of rolled dice that meet a certain criteria.
+
+#### Combining Modifiers
+
+You can combine multiple modifiers in any order without restriction, except for ***Count***, which must be last and can only be used at most once.
+
+You can think of the modifiers as belonging these different groups:
+
+- ***Advantage***, ***Disadvantage***, ***Maximize***, and ***Minimize*** let you change *how you roll* the dice in a pool.
+- ***Keep*** and ***Drop***, and ***Explode*** let you look at what you've rolled so far and *modify the pool* before you proceed.
+- ***Count*** lets you change *how you* ***combine*** results at the end of rolling a pool.
+
+Since this is the order of resolution, this is the conventional order that they are written in expressions.
+
+In practice, it is rare to use more than one modifier from each category.
+
+##### Interactions
+
+***Maximize*** and ***Minimize*** override each other and ***Advantage*** and ***Disadvantage***, so it never makes sense to repeat them or combine with ***Advantage*** and ***Disadvantage***.
+
+***Explode***d dice add new, unrolled dice to the pool. These dice do not keep the ***Advantage***, ***Disadvantage***, ***Maximize***, and ***Minimize*** modifiers of the original pool; you must apply them again after the explosion modifier if you want them to apply to exploded die. For example:
+
+- ***Maximize*** then ***Explode*** will maximize the originally rolled dice, but not the explosions.
+- ***Explode*** then ***Maximize*** will only maximize the explosion dice.
+- To maximize both in a `d20` roll, you would need to write `d20M!M`.
+
+***Advantage*** and ***Disadvantage*** can be repeated, but use-cases for this are rare. For example, a `d20+-` rolled with advantage, then disadvantage, will:
+
+ - roll `2d20` and keep the highest result
+ - roll another `2d20` and keep the highest result
+ - then keep the lowest result of the two
+
+***Keep*** and ***Drop*** can be repeated in various orders to filter dice from the pool. Again, use-cases are rare.
 
 #### Keep
 
@@ -77,7 +120,11 @@ By default, random dice are dropped. This can be further modified to:
 >
 > ***Keep Exploding*** (`!!`) will not trigger on 1-sided dice, or dice with a single value on all sides.
 >
-> ***Keep Exploding At*** (`!N`) will not explode dice where no side is less than `N`. Other safeguards exist to ensure no explosion chain is allowed to run forever.
+> ***Keep Exploding At*** (`!N`) will not explode dice where no side is less than `N`.
+>
+> ***Keep Exploding*** (`!!`) chains cannot be ***Maximize***d (`M`).
+>
+> Other safeguards exist to ensure no explosion chain is allowed to run forever.
 
 | Operation | Expression | Interpretation | Example | Meaning | Notes |
 | :---: | ---: | :--- | ---: | :--- | :--- |
