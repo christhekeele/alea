@@ -135,7 +135,7 @@ While `dS` syntax describes a die with `S` sides, with numbers `1`-`S` on those 
 
 | Die | Expression | Interpretation | Example | Meaning | Notes |
 | :---: | ---: | :--- | ---: | :--- | :--- |
-| ***Range Die*** | `d[X..Y]` | Roll one die with `|Y - X| + 1` sides, with the integers `Y`, `X`, and all integers in between them on those sides. | `d[-1..1]` | Roll a 3-sided die, with numbers `-1`, `0`, and `1` on those sides. | Equivalent to ***List Die***: `d{-1, 0, 1}`. |
+| ***Range Die*** | `d[X..Y]` | Roll one die with `Y - X + 1` sides, with the integers `Y`, `X`, and all integers in between them on those sides. | `d[-1..1]` | Roll a 3-sided die, with numbers `-1`, `0`, and `1` on those sides. | Equivalent to ***List Die***: `d{-1, 0, 1}`. |
 | ***List Die*** | `d{X, Y, Z}` | Roll a die with the integers specified in the list on each side. | `d{1, 1, 100}` | Roll a die with a 2/3 chance of coming up `1`, and 1/3 chance coming up `100`. |  |
 
 #### Alias Dice
