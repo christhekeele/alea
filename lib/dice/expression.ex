@@ -1,31 +1,3 @@
-defprotocol Dice.Expression.Evaluate do
-  def evaluate(node)
-end
-
-defmodule Dice.Expression.Term do
-  import Dice.Parser.Builder
-
-  defparser do
-    choice([
-      parsec({Dice.Pool.Parser, :combinator}),
-      parsec({Dice.Constant.Parser, :combinator}),
-    ])
-  end
-
-end
-
-defmodule Dice.Expression.Operation do
-  import Dice.Parser.Builder
-
-  defparser do
-    choice([
-      parsec({Dice.Operator.Addition.Parser, :combinator}),
-      parsec({Dice.Operator.Subtraction.Parser, :combinator}),
-    ])
-  end
-
-end
-
 defmodule Dice.Expression do
   defstruct [:expression]
 

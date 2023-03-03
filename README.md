@@ -15,9 +15,9 @@ Dice expressions let you describe rolling multiple dice of different sizes, and 
 
 | Operation | Expression | Interpretation | Example | Meaning | Notes |
 | :---: | ---: | :--- | ---: | :--- | :--- |
-| ***Roll*** | `dS` | Roll a die with `S` sides. | `d20` | Roll 1 `d20`. | Equivalent to ***Roll Many***: `1dS`. Equivalent to ***Range Die***: `d{1..20}`. |
-| ***Addition*** | `dS + C` | Roll `N` dice with `S` sides, and add a constant value `C` from the result. | `d20 + 5` | Roll 1 `d20` and add `5` to the result. |  |
-| ***Subtraction*** | `dS - C` | Roll `N` dice with `S` sides, and subtract a constant value `C` from the result. | `d20 - 2` | Roll 1 `d20` and subtract `2` from the result. |  |
+| ***Roll*** | `dS` | Roll a die with `S` sides. | `d20` | Roll one `d20`. | Equivalent to ***Roll Many***: `1dS`. Equivalent to ***Range Die***: `d{1..20}`. |
+| ***Addition*** | `dS + C` | Roll a die with `S` sides, and add `C` to the result. | `d20 + 1` | Roll one `d20` and add `1` to the result. |  |
+| ***Subtraction*** | `dS - C` | Roll a die with `S` sides, and subtract `C` from the result. | `d20 - 2` | Roll 1 `d20` and subtract `2` from the result. |  |
 | ***Roll Many*** | `NdS` | Roll `N` dice with `S` sides and add the results. | `3d6` | Roll 3 `d6` and add the results. |  |
 | ***Roll Different*** | `NdS + MdT + C` | Roll `N` dice with `S` sides, `M` dice with `T` sides, and add all together plus `C`. | `3d6 + d4 + 2` | Roll 3 `d6`, one `d4`, and add `2` to the results. |  |
 
@@ -143,7 +143,7 @@ While `dS` syntax describes a die with `S` sides, with numbers `1`-`S` on those 
 Common custom die have shortcut aliases for easier use.
 
 | Die | Expression | Interpretation | Notes |
-| :---: | ---: | :--- | ---: | :--- | :--- |
+| :---: | ---: | :--- | :--- |
 | ***Percent Die*** | `d%` | Roll a `d100` to represent a probabilistic outcome. | Equivalent to ***Roll***: `d100`. |
 | ***Standard Fudge Die*** | `dF` | Roll a 3-sided die with values `-1`, `0`, and `1` on the sides. | Equivalent to ***Range Die***: `d[-1..1]`. |
 | ***Fudge Die*** | `dFN` | Roll a `2N + 1`-sided die with values between `-S` and `S`, including `0`. | Equivalent to ***Range Die***: `d[-S..S]`. |

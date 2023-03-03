@@ -1,5 +1,4 @@
 defmodule Dice.Parser.Builder do
-  alias URI.Error
   defmacro defparser(args \\ [], do: combinator) do
     Module.put_attribute(__CALLER__.module, :combinator, combinator)
 
