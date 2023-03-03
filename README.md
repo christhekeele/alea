@@ -1,8 +1,8 @@
 # Dice
 
-> ***An RPG dice notation expression language for `Elixir`.***
+> ***An RPG dice engine and notation language for `Elixir`.***
 
-## Syntax Overview
+## Dice Notation
 
 ### Basics
 
@@ -54,6 +54,26 @@ By default, random dice are dropped. This can be further modified to:
 - Drop the highest rolls (***Drop Highest***: `DH`)
 - Drop the lowest rolls (***Drop Lowest***: `DL`)
 - Explicitly drop random rolls (***Drop Random***: `DR`)
+
+| Operation | Expression | Interpretation | Example | Meaning | Notes |
+| :---: | ---: | :--- | ---: | :--- | :--- |
+| ***Drop*** | `NdSD` | Roll `N` dice with `S` sides, and drop a random die. | `2d20D` | Roll 2 `d20` and drop one at random. | Equivalent to ***Drop Random***: `NdSD1R`. |
+| ***Drop Many*** | `NdSDM` | Roll `N` dice with `S` sides, and drop `M` random dice. | `3d20D2` | Roll 3 `d20` and drop `2` at random. | Equivalent to ***Drop Random***: `NdSDMR.` |
+| ***Drop Random*** | `NdSDMR` | Roll `N` dice with `S` sides, and drop `M` random dice. | `3d20D2R` | Roll 3 `d20` and drop `2` at random. | Equivalent to ***Drop Many***: `NdSKM`. | 
+| ***Drop Highest*** | `NdSDH` | Roll `N` dice with `S` sides, and drop the highest result. | `2d20DH` | Roll 2 `d20` and drop the highest result. |  |
+| ***Drop Many Highest*** | `NdSDMH` | Roll `N` dice with `S` sides, and drop the highest `M` results. | `3d20D2H` | Roll 3 `d20` and drop the `2` highest. |
+| ***Drop Lowest*** | `NdSDL` | Roll `N` dice with `S` sides, and drop the lowest result. | `2d20DL` | Roll 2 `d20` and drop the lowest result. |  |
+| ***Drop Many Lowest*** | `NdSDML` | Roll `N` dice with `S` sides, and drop the lowest `M` results. | `3d20D2L` | Roll 3 `d20` and drop the `2` lowest. |  |
+
+#### Count
+
+***Count*** (`C`) lets you change a dice pools output from being a sum of dice rolls, to the count of rolled dice that meet a certain criteria.
+
+By default, all dice are counted. This can be further modified to:
+
+- Count rolls higher than a number (***Count Greater Than***: `C>`)
+- Count rolls lower than a number (***Count Lower Than***: `C<`)
+- critical success, failure, explosions?
 
 | Operation | Expression | Interpretation | Example | Meaning | Notes |
 | :---: | ---: | :--- | ---: | :--- | :--- |

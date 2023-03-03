@@ -21,8 +21,7 @@ defmodule Dice.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:nimble_parsec, "~> 1.2.3"},
-      {:gettext, "~> 0.22.1"}
+      {:nimble_parsec, "~> 1.2.3"}
     ]
   end
 end
