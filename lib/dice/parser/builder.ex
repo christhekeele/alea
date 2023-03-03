@@ -2,9 +2,17 @@ defmodule Dice.Parser.Builder do
   defmacro defparser(args \\ [], do: combinator) do
     Module.put_attribute(__CALLER__.module, :combinator, combinator)
 
-    variable = args
-    |> Keyword.get(:variable, __CALLER__.module |> Module.split |> List.last |> String.downcase |> String.to_atom)
-    |> Macro.var(__CALLER__.module)
+    variable =
+      args
+      |> Keyword.get(
+        :variable,
+        __CALLER__.module
+        |> Module.split()
+        |> List.last()
+        |> String.downcase()
+        |> String.to_atom()
+      )
+      |> Macro.var(__CALLER__.module)
 
     quote location: :keep, generated: true do
       @before_compile {Dice.Parser.Module, :build_parser_module}
@@ -37,8 +45,8 @@ defmodule Dice.Parser.Builder do
       def validate(unquote(variable)) do
         {:ok, unquote(variable)}
       end
-      defoverridable(validate: 1)
 
+      defoverridable(validate: 1)
     end
   end
 end

@@ -1,4 +1,4 @@
-defmodule Dice.Pool.Modifier.Drop do
+defmodule Dice.Pool.Modifiers.Drop do
   defstruct [:number, mode: :random]
 
   import Dice.Parser.Builder
@@ -13,7 +13,7 @@ defmodule Dice.Pool.Modifier.Drop do
     ignore(drop_literal())
     |> concat(optional(unwrap_and_tag(non_negative_integer_literal(), :number)))
     |> concat(optional(unwrap_and_tag(choice(modes), :mode)))
-    |> post_traverse({Dice.Pool.Modifier.Drop, :from_parse, []})
+    |> post_traverse({Dice.Pool.Modifiers.Drop, :from_parse, []})
   end
 
   def from_parse(unparsed, parsed, context, _line, _offset) do
@@ -43,13 +43,13 @@ defmodule Dice.Pool.Modifier.Drop do
   end
 
   defimpl String.Chars do
-    def to_string(%Dice.Pool.Modifier.Drop{} = drop) do
+    def to_string(%Dice.Pool.Modifiers.Drop{} = drop) do
       "D" <>
-      case drop.mode do
-        :random -> "#{drop.number}"
-        :low -> if drop.number == 1, do: "L", else: "#{drop.number}L"
-        :high -> if drop.number == 1, do: "H", else: "#{drop.number}H"
-      end
+        case drop.mode do
+          :random -> "#{drop.number}"
+          :low -> if drop.number == 1, do: "L", else: "#{drop.number}L"
+          :high -> if drop.number == 1, do: "H", else: "#{drop.number}H"
+        end
     end
   end
 end

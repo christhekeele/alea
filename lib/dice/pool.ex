@@ -1,24 +1,25 @@
 defmodule Dice.Pool do
-  defstruct [:die, quantity: 1, modifiers: []]
+  @default_quantity 1
+
+  defstruct [:die, quantity: @default_quantity, modifiers: []]
 
   import Dice.Parser.Builder
 
   defparser do
-    numeric_dice_modifiers = [
-      parsec({__MODULE__.Modifier.Drop.Parser, :combinator}),
-      parsec({__MODULE__.Modifier.Keep.Parser, :combinator})
-    ]
-
     optional(unwrap_and_tag(non_negative_integer_literal(), :quantity))
     |> concat(unwrap_and_tag(parsec({Dice.Die.Parser, :combinator}), :die))
-    |> concat(optional(repeat(unwrap_and_tag(choice(numeric_dice_modifiers), :modifier))))
+    |> concat(
+      optional(
+        repeat(unwrap_and_tag(parsec({Dice.Pool.Modifiers.Parser, :combinator}), :modifier))
+      )
+    )
     |> post_traverse({__MODULE__, :from_parse, []})
   end
 
   def from_parse(unparsed, parsed, context, _line, _offset) do
-    quantity = Keyword.get(parsed, :quantity, 1)
+    quantity = Keyword.get(parsed, :quantity, @default_quantity)
     die = Keyword.fetch!(parsed, :die)
-    modifiers = :lists.reverse(Keyword.get_values(parsed, :modifier))
+    modifiers = parsed |> Keyword.get_values(:modifier) |> :lists.reverse()
 
     pool = %__MODULE__{
       die: die,
@@ -38,8 +39,11 @@ defmodule Dice.Pool do
 
       Enum.reduce(pool.modifiers, rolls, fn modifier, rolls ->
         case modifier do
-          %Dice.Pool.Modifier.Keep{} = modifier -> Dice.Pool.Modifier.Keep.modify(modifier, rolls)
-          %Dice.Pool.Modifier.Drop{} = modifier -> Dice.Pool.Modifier.Drop.modify(modifier, rolls)
+          %Dice.Pool.Modifiers.Keep{} = modifier ->
+            Dice.Pool.Modifiers.Keep.modify(modifier, rolls)
+
+          %Dice.Pool.Modifiers.Drop{} = modifier ->
+            Dice.Pool.Modifiers.Drop.modify(modifier, rolls)
         end
       end)
       |> Enum.sum()

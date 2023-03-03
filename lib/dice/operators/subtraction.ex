@@ -1,4 +1,4 @@
-defmodule Dice.Operator.Subtraction do
+defmodule Dice.Operators.Subtraction do
   defstruct [:left, :right]
 
   @symbol "-"
@@ -29,18 +29,22 @@ defmodule Dice.Operator.Subtraction do
   end
 
   defimpl Dice.Expression.Evaluate do
-    def evaluate(%Dice.Operator.Subtraction{} = subtraction) do
-      Dice.Expression.Evaluate.evaluate(subtraction.left) - Dice.Expression.Evaluate.evaluate(subtraction.right)
+    def evaluate(%Dice.Operators.Subtraction{} = subtraction) do
+      Dice.Expression.Evaluate.evaluate(subtraction.left) -
+        Dice.Expression.Evaluate.evaluate(subtraction.right)
     end
   end
 
   defimpl String.Chars do
-    def to_string(%Dice.Operator.Subtraction{} = subtraction) do
-      Enum.join([
-        Kernel.to_string(subtraction.left),
-        Dice.Operator.Subtraction.symbol(),
-        Kernel.to_string(subtraction.right)
-      ], " ")
+    def to_string(%Dice.Operators.Subtraction{} = subtraction) do
+      Enum.join(
+        [
+          Kernel.to_string(subtraction.left),
+          Dice.Operators.Subtraction.symbol(),
+          Kernel.to_string(subtraction.right)
+        ],
+        " "
+      )
     end
   end
 end

@@ -1,4 +1,4 @@
-defmodule Dice.Operator.Addition do
+defmodule Dice.Operators.Addition do
   defstruct [:left, :right]
 
   @symbol "+"
@@ -29,18 +29,22 @@ defmodule Dice.Operator.Addition do
   end
 
   defimpl Dice.Expression.Evaluate do
-    def evaluate(%Dice.Operator.Addition{} = addition) do
-      Dice.Expression.Evaluate.evaluate(addition.left) + Dice.Expression.Evaluate.evaluate(addition.right)
+    def evaluate(%Dice.Operators.Addition{} = addition) do
+      Dice.Expression.Evaluate.evaluate(addition.left) +
+        Dice.Expression.Evaluate.evaluate(addition.right)
     end
   end
 
   defimpl String.Chars do
-    def to_string(%Dice.Operator.Addition{} = addition) do
-      Enum.join([
-        Kernel.to_string(addition.left),
-        Dice.Operator.Addition.symbol(),
-        Kernel.to_string(addition.right)
-      ], " ")
+    def to_string(%Dice.Operators.Addition{} = addition) do
+      Enum.join(
+        [
+          Kernel.to_string(addition.left),
+          Dice.Operators.Addition.symbol(),
+          Kernel.to_string(addition.right)
+        ],
+        " "
+      )
     end
   end
 end

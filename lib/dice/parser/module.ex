@@ -13,9 +13,12 @@ defmodule Dice.Parser.Module do
         other -> other
       end)
       |> Macro.postwalk(fn
-        {:@, _, [{attribute, _, _}]} -> {{:., [], [{:__aliases__, [alias: false], [:Module]}, :get_attribute]}, [],
-        [{:__aliases__, [alias: false], base_module_alias}, attribute]}
-        other -> other
+        {:@, _, [{attribute, _, _}]} ->
+          {{:., [], [{:__aliases__, [alias: false], [:Module]}, :get_attribute]}, [],
+           [{:__aliases__, [alias: false], base_module_alias}, attribute]}
+
+        other ->
+          other
       end)
 
     quote location: :keep, generated: true do
@@ -28,7 +31,10 @@ defmodule Dice.Parser.Module do
         end
 
         # defparsec(:parse, unquote(combinator), inline: true, export_metadata: true)
-        defcombinator(:combinator, empty() |> concat(unquote(combinator)), inline: true, export_metadata: true)
+        defcombinator(:combinator, empty() |> concat(unquote(combinator)),
+          inline: true,
+          export_metadata: true
+        )
 
         parser =
           unquote(combinator)

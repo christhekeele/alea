@@ -4,10 +4,9 @@ defmodule Dice.Expression do
   import Dice.Parser.Builder
 
   defparser do
-
     expression = [
-      parsec({Dice.Expression.Operation.Parser, :combinator}),
-      parsec({Dice.Expression.Term.Parser, :combinator}),
+      parsec({Dice.Operators.Parser, :combinator}),
+      parsec({Dice.Expression.Term.Parser, :combinator})
     ]
 
     optional(whitespace_literal())

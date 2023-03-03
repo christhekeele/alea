@@ -17,9 +17,9 @@ Dice expressions let you describe rolling multiple dice of different sizes, and 
 | :---: | ---: | :--- | ---: | :--- | :--- |
 | ***Roll*** | `dS` | Roll a die with `S` sides. | `d20` | Roll one `d20`. | Equivalent to ***Roll Many***: `1dS`. Equivalent to ***Range Die***: `d{1..20}`. |
 | ***Addition*** | `dS + C` | Roll a die with `S` sides, and add `C` to the result. | `d20 + 1` | Roll one `d20` and add `1` to the result. |  |
-| ***Subtraction*** | `dS - C` | Roll a die with `S` sides, and subtract `C` from the result. | `d20 - 2` | Roll 1 `d20` and subtract `2` from the result. |  |
-| ***Roll Many*** | `NdS` | Roll `N` dice with `S` sides and add the results. | `3d6` | Roll 3 `d6` and add the results. |  |
-| ***Roll Different*** | `NdS + MdT + C` | Roll `N` dice with `S` sides, `M` dice with `T` sides, and add all together plus `C`. | `3d6 + d4 + 2` | Roll 3 `d6`, one `d4`, and add `2` to the results. |  |
+| ***Subtraction*** | `dS - C` | Roll a die with `S` sides, and subtract `C` from the result. | `d20 - 2` | Roll one `d20` and subtract `2` from the result. |  |
+| ***Roll Many*** | `NdS` | Roll `N` dice with `S` sides and add the results. | `3d6` | Roll `3` `d6` and add the results. |  |
+| ***Roll Different*** | `NdS + MdT + C` | Roll `N` dice with `S` sides, `M` dice with `T` sides, and add all together plus `C`. | `3d6 + d4 + 2` | Roll `3` `d6`, one `d4`, and add `2` to the results. |  |
 
 ### Roll Modifiers
 
@@ -77,13 +77,7 @@ By default, all dice are counted. This can be further modified to:
 
 | Operation | Expression | Interpretation | Example | Meaning | Notes |
 | :---: | ---: | :--- | ---: | :--- | :--- |
-| ***Drop*** | `NdSD` | Roll `N` dice with `S` sides, and drop a random die. | `2d20D` | Roll 2 `d20` and drop one at random. | Equivalent to ***Drop Random***: `NdSD1R`. |
-| ***Drop Many*** | `NdSDM` | Roll `N` dice with `S` sides, and drop `M` random dice. | `3d20D2` | Roll 3 `d20` and drop `2` at random. | Equivalent to ***Drop Random***: `NdSDMR.` |
-| ***Drop Random*** | `NdSDMR` | Roll `N` dice with `S` sides, and drop `M` random dice. | `3d20D2R` | Roll 3 `d20` and drop `2` at random. | Equivalent to ***Drop Many***: `NdSKM`. | 
-| ***Drop Highest*** | `NdSDH` | Roll `N` dice with `S` sides, and drop the highest result. | `2d20DH` | Roll 2 `d20` and drop the highest result. |  |
-| ***Drop Many Highest*** | `NdSDMH` | Roll `N` dice with `S` sides, and drop the highest `M` results. | `3d20D2H` | Roll 3 `d20` and drop the `2` highest. |
-| ***Drop Lowest*** | `NdSDL` | Roll `N` dice with `S` sides, and drop the lowest result. | `2d20DL` | Roll 2 `d20` and drop the lowest result. |  |
-| ***Drop Many Lowest*** | `NdSDML` | Roll `N` dice with `S` sides, and drop the lowest `M` results. | `3d20D2L` | Roll 3 `d20` and drop the `2` lowest. |  |
+| ***TBD*** |
 
 #### Explode
 
@@ -109,7 +103,11 @@ By default, re-rolls do not trigger explosions. This can be further modified by 
 
 ***Advantage*** (`dS+`) lets you treat a roll as if you had rolled it twice, and taken the better roll. Conversely, ***Disadvantage*** (`dS-`) takes the worse roll.
 
-> **NOTE** that this works differently from just rolling twice as many dice with ***Keep High***/***Keep Low***, when rolling more than one die with **Advantage**/**Disadvantage**! `KH`/`KL` will remove the worst/best rolls from the entire pool, whereas **Advantage**/**Disadvantage** treats each roll as a pool of two before proceeding, allowing more good/poor rolls to contribute to the total. In practice, this means that `NdS+` will have more variance and average lower results than `2NdSKHN`, and `NdS-` will have more variance and average higher results than `2NdSKLN`.
+> **NOTE** that this works differently from just rolling twice as many dice with ***Keep High***/***Keep Low***, when rolling more than one die with **Advantage**/**Disadvantage**!
+>
+> `KH`/`KL` will remove the worst/best rolls from the entire pool, whereas **Advantage**/**Disadvantage** treats each roll as a pool of two before proceeding, allowing more good/poor rolls to contribute to the total. 
+>
+> In practice, this means that `NdS+` will have more variance and average lower results than `2NdSKHN`, and `NdS-` will have more variance and average higher results than `2NdSKLN`.
 
 | Operation | Expression | Interpretation | Example | Meaning | Notes |
 | :---: | ---: | :--- | ---: | :--- | :--- |

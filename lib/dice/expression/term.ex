@@ -4,8 +4,7 @@ defmodule Dice.Expression.Term do
   defparser do
     choice([
       parsec({Dice.Pool.Parser, :combinator}),
-      parsec({Dice.Constant.Parser, :combinator}),
+      parsec({Dice.Constant.Parser, :combinator})
     ])
   end
-
 end
