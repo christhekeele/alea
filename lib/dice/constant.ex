@@ -19,11 +19,15 @@ defmodule Dice.Constant do
     {unparsed, [constant], context}
   end
 
-  def evaluate(%__MODULE__{} = constant) do
-    constant.value
+  defimpl Dice.Expression.Evaluate do
+    def evaluate(%Dice.Constant{} = constant) do
+      constant.value
+    end
   end
 
-  def to_string(%__MODULE__{} = constant) do
-    constant.value |> Integer.to_string()
+  defimpl String.Chars do
+    def to_string(%Dice.Constant{} = constant) do
+      Kernel.to_string(constant.value)
+    end
   end
 end

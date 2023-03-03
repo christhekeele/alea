@@ -1,4 +1,4 @@
-defmodule Dice.Pool.Modifier.Keep do
+defmodule Dice.Pool.Modifier.Drop do
   defstruct [:number, mode: :random]
 
   import Dice.Parser.Builder
@@ -10,10 +10,10 @@ defmodule Dice.Pool.Modifier.Keep do
       rand_literal()
     ]
 
-    ignore(keep_literal())
+    ignore(drop_literal())
     |> concat(optional(unwrap_and_tag(non_negative_integer_literal(), :number)))
     |> concat(optional(unwrap_and_tag(choice(modes), :mode)))
-    |> post_traverse({Dice.Pool.Modifier.Keep, :from_parse, []})
+    |> post_traverse({Dice.Pool.Modifier.Drop, :from_parse, []})
   end
 
   def from_parse(unparsed, parsed, context, _line, _offset) do
@@ -34,20 +34,22 @@ defmodule Dice.Pool.Modifier.Keep do
     {unparsed, [modifier], context}
   end
 
-  def modify(%__MODULE__{} = keep, rolls) do
-    case keep.mode do
-      :random -> Enum.take_random(rolls, keep.number)
-      :low -> Enum.sort(rolls) |> Enum.take(keep.number)
-      :high -> Enum.sort(rolls) |> :lists.reverse() |> Enum.take(keep.number)
+  def modify(%__MODULE__{} = drop, rolls) do
+    case drop.mode do
+      :random -> Enum.take_random(rolls, length(rolls) - drop.number)
+      :low -> Enum.sort(rolls) |> Enum.drop(drop.number)
+      :high -> Enum.sort(rolls) |> :lists.reverse() |> Enum.drop(drop.number)
     end
   end
 
-  def to_string(%__MODULE__{} = keep) do
-    "K" <>
-      case keep.mode do
-        :random -> "#{keep.number}"
-        :low -> if keep.number == 1, do: "L", else: "#{keep.number}L"
-        :high -> if keep.number == 1, do: "H", else: "#{keep.number}H"
+  defimpl String.Chars do
+    def to_string(%Dice.Pool.Modifier.Drop{} = drop) do
+      "D" <>
+      case drop.mode do
+        :random -> "#{drop.number}"
+        :low -> if drop.number == 1, do: "L", else: "#{drop.number}L"
+        :high -> if drop.number == 1, do: "H", else: "#{drop.number}H"
       end
+    end
   end
 end

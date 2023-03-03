@@ -52,19 +52,23 @@ defmodule Dice.Die do
     {unparsed, [numbers], context}
   end
 
-  def roll(%__MODULE__{} = dice) do
-    case dice.faces do
-      number when is_integer(number) and number > 0 -> :rand.uniform(number)
-      %Range{} = range -> Enum.random(range)
-      faces when is_list(faces) -> Enum.random(faces)
+  defimpl Dice.Expression.Evaluate do
+    def evaluate(%Dice.Die{} = die) do
+      case die.faces do
+        number when is_integer(number) and number > 0 -> :rand.uniform(number)
+        %Range{} = range -> Enum.random(range)
+        faces when is_list(faces) -> Enum.random(faces)
+      end
     end
   end
 
-  def to_string(%__MODULE__{} = dice) do
-    case dice.faces do
-      number when is_integer(number) -> "d#{Integer.to_string(number)}"
-      %Range{} = range -> "d[#{range.first}..#{range.last}]"
-      faces when is_list(faces) -> "d{#{Enum.join(faces, ", ")}}"
+  defimpl String.Chars do
+    def to_string(%Dice.Die{} = die) do
+      case die.faces do
+        number when is_integer(number) -> "d#{number}"
+        %Range{} = range -> "d[#{range.first}..#{range.last}]"
+        faces when is_list(faces) -> "d{#{Enum.join(faces, ", ")}}"
+      end
     end
   end
 end

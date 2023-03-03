@@ -3,7 +3,11 @@ defmodule Dice do
     string |> Dice.Expression.new()
   end
 
+  def roll(%Dice.Expression{} = expression) do
+    expression |> Dice.Expression.Evaluate.evaluate()
+  end
+
   def roll(string) when is_binary(string) do
-    string |> expression |> Dice.Expression.evaluate()
+    string |> expression |> roll
   end
 end

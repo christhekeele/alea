@@ -13,7 +13,7 @@ defmodule Dice.Parser.Module do
         other -> other
       end)
 
-    quote location: :keep do
+    quote location: :keep, generated: true do
       defmodule unquote(Module.concat(env.module, Parser)) do
         import NimbleParsec
         import Dice.Parser.Helpers
@@ -21,6 +21,9 @@ defmodule Dice.Parser.Module do
         def combinator do
           unquote(combinator)
         end
+
+        # defparsec(:parse, unquote(combinator), inline: true, export_metadata: true)
+        defcombinator(:combinator, empty() |> concat(unquote(combinator)), inline: true, export_metadata: true)
 
         parser =
           unquote(combinator)
