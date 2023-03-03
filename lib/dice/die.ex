@@ -1,6 +1,14 @@
 defmodule Dice.Die do
   defstruct [:faces]
 
+  @symbol "d"
+  @compile {:inline, symbol: 0}
+  def symbol, do: @symbol
+
+  @range_symbol ".."
+  @compile {:inline, range_symbol: 0}
+  def range_symbol, do: @range_symbol
+
   import Dice.Parser.Builder
 
   defparser do
@@ -9,7 +17,7 @@ defmodule Dice.Die do
     dice_range_descriptor =
       ignore(left_bracket_literal())
       |> concat(unwrap_and_tag(integer_literal(), :first))
-      |> concat(ignore(range_literal()))
+      |> concat(ignore(string(@range_symbol)))
       |> concat(unwrap_and_tag(integer_literal(), :last))
       |> concat(right_bracket_literal())
       |> post_traverse({__MODULE__, :dice_range_constructor, []})
@@ -27,7 +35,7 @@ defmodule Dice.Die do
       dice_set_descriptor
     ]
 
-    concat(ignore(dice_literal()), unwrap_and_tag(choice(numeric_dice_descriptor), :faces))
+    concat(ignore(string(@symbol)), unwrap_and_tag(choice(numeric_dice_descriptor), :faces))
     |> post_traverse({__MODULE__, :from_parse, []})
   end
 
@@ -64,10 +72,10 @@ defmodule Dice.Die do
 
   defimpl String.Chars do
     def to_string(%Dice.Die{} = die) do
-      case die.faces do
-        number when is_integer(number) -> "d#{number}"
-        %Range{} = range -> "d[#{range.first}..#{range.last}]"
-        faces when is_list(faces) -> "d{#{Enum.join(faces, ", ")}}"
+      Dice.Die.symbol() <> case die.faces do
+        number when is_integer(number) -> Integer.to_string(number)
+        %Range{} = range -> Enum.join([Integer.to_string(range.first), Dice.Die.range_symbol(), Integer.to_string(range.last)])
+        faces when is_list(faces) -> Enum.join(faces |> Enum.map(&Integer.to_string/1), ", ")
       end
     end
   end

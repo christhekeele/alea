@@ -9,7 +9,12 @@ defmodule Dice.Parser.Module do
       env.module
       |> Module.get_attribute(:combinator)
       |> Macro.postwalk(fn
-        {:__MODULE__, _meta, _context} -> {:__aliases__, [{:alias, false}], base_module_alias}
+        {:__MODULE__, _, _} -> {:__aliases__, [{:alias, false}], base_module_alias}
+        other -> other
+      end)
+      |> Macro.postwalk(fn
+        {:@, _, [{attribute, _, _}]} -> {{:., [], [{:__aliases__, [alias: false], [:Module]}, :get_attribute]}, [],
+        [{:__aliases__, [alias: false], base_module_alias}, attribute]}
         other -> other
       end)
 

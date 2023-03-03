@@ -6,16 +6,9 @@ defmodule Dice.Parser.Helpers do
 
   def integer_literal,
     do:
-      optional(unwrap_and_tag(negative_literal(), :negative))
+      optional(unwrap_and_tag(string("-"), :negative))
       |> concat(unwrap_and_tag(non_negative_integer_literal(), :number))
       |> post_traverse({__MODULE__, :integer_literal_constructor, []})
-
-  def negative_literal, do: string("-")
-  def positive_literal, do: string("+")
-
-  def dice_literal, do: string("d")
-
-  def range_literal, do: string("..")
 
   def comma_literal,
     do:

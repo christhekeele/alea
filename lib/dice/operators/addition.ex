@@ -1,12 +1,16 @@
 defmodule Dice.Operator.Addition do
   defstruct [:left, :right]
 
+  @symbol "+"
+  @compile {:inline, symbol: 0}
+  def symbol, do: @symbol
+
   import Dice.Parser.Builder
 
   defparser do
     unwrap_and_tag(parsec({Dice.Expression.Term.Parser, :combinator}), :left)
     |> concat(optional(whitespace_literal()))
-    |> concat(ignore(positive_literal()))
+    |> concat(ignore(string(@symbol)))
     |> concat(optional(whitespace_literal()))
     |> unwrap_and_tag(parsec({Dice.Expression.Term.Parser, :combinator}), :right)
     |> post_traverse({__MODULE__, :from_parse, []})
@@ -34,7 +38,7 @@ defmodule Dice.Operator.Addition do
     def to_string(%Dice.Operator.Addition{} = addition) do
       Enum.join([
         Kernel.to_string(addition.left),
-        "+",
+        Dice.Operator.Addition.symbol(),
         Kernel.to_string(addition.right)
       ], " ")
     end
